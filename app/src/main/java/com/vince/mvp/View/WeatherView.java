@@ -51,8 +51,10 @@ public class WeatherView extends AppCompatActivity implements IWeatherView, View
         setContentView(R.layout.activity_main);
         presenter = new WeatherPresenterImpl(this);
         initView();
-        presenter.update("广州");
-        presenter.updateBack();
+        if(!presenter.isCahe(this)){
+            presenter.update("广州",this);
+            presenter.updateBack(this);
+        }
     }
 
 

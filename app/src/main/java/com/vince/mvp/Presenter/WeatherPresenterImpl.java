@@ -1,7 +1,10 @@
 package com.vince.mvp.Presenter;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 
 import com.vince.mvp.Model.Utilily;
 import com.vince.mvp.Model.Weather;
@@ -28,7 +31,7 @@ public class WeatherPresenterImpl implements IWeatherPresenter {
     }
 
     @Override
-    public void update(String weatherCode) {
+    public void update(String weatherCode, final Context context) {
         String address = "https://free-api.heweather.com/v5/weather?city="+weatherCode+"&key=bc0418b57b2d4918819d3974ac1285d9";
         Utilily.sendHttpURL(address, new Callback() {
             @Override
@@ -36,10 +39,14 @@ public class WeatherPresenterImpl implements IWeatherPresenter {
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                final Weather weather = Utilily.handleWeatherCode(response.body().string());
+                final String weatherContent = response.body().string();
+                final Weather weather = Utilily.handleWeatherCode(weatherContent);
                 handler.post(new Runnable() {//回到主线程修改UI
                     @Override
                     public void run() {
+                        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+                        editor.putString("weather", weatherContent);//缓存功能
+                        editor.apply();
                         weatherView.updateWeather(weather);
                     }
                 });
@@ -49,7 +56,7 @@ public class WeatherPresenterImpl implements IWeatherPresenter {
     }
 
     @Override
-    public void updateBack() {
+    public void updateBack(final Context context) {
         String imageaddress = "http://guolin.tech/api/bing_pic";
         Utilily.sendHttpURL(imageaddress, new Callback() {
             @Override
@@ -61,10 +68,32 @@ public class WeatherPresenterImpl implements IWeatherPresenter {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+                        editor.putString("imgCache", imageCahe);//缓存功能
+                        editor.apply();
                         weatherView.updateBackGround(imageCahe);
                     }
                 });
             }
         });
+    }
+
+    @Override
+    public boolean isCahe(Context context) {//判断缓存
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(context);
+        String weatherCache = spf.getString("weather", null);
+        final String imgCache = spf.getString("imgCache", null);
+        if(weatherCache!=null&&imgCache!=null){
+            final Weather weather = Utilily.handleWeatherCode(weatherCache);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    weatherView.updateWeather(weather);
+                    weatherView.updateBackGround(imgCache);
+                }
+            });
+            return true;
+        }
+        return false;
     }
 }
