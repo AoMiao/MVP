@@ -1,8 +1,9 @@
-package com.vince.mvp.View;
+package com.vince.mvp.WeatherModule.View;
 
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.vince.mvp.Model.Forecast;
-import com.vince.mvp.Model.Weather;
-import com.vince.mvp.Presenter.IWeatherPresenter;
-import com.vince.mvp.Presenter.WeatherPresenterImpl;
+import com.vince.mvp.WeatherModule.Model.Forecast;
+import com.vince.mvp.WeatherModule.Model.Weather;
+import com.vince.mvp.WeatherModule.Presenter.IWeatherPresenter;
+import com.vince.mvp.WeatherModule.Presenter.WeatherPresenterImpl;
 import com.vince.mvp.R;
 
 import java.text.SimpleDateFormat;
@@ -36,6 +37,7 @@ public class WeatherView extends AppCompatActivity implements IWeatherView, View
     private Button choose_button;
     private ImageView now_png;
     private ImageView bing_pic_img;
+    private SwipeRefreshLayout swipe_refresh;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     private IWeatherPresenter presenter;
@@ -49,8 +51,9 @@ public class WeatherView extends AppCompatActivity implements IWeatherView, View
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
         setContentView(R.layout.activity_main);
-        presenter = new WeatherPresenterImpl(this);
         initView();
+        setListener();
+        presenter = new WeatherPresenterImpl(this);
         if(!presenter.isCahe(this)){
             presenter.update("广州",this);
             presenter.updateBack(this);
@@ -73,6 +76,8 @@ public class WeatherView extends AppCompatActivity implements IWeatherView, View
         now_png = (ImageView) findViewById(R.id.now_png);
         choose_button = (Button) findViewById(R.id.choose_button);
         bing_pic_img = (ImageView) findViewById(R.id.bing_pic_img);
+        swipe_refresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
+        swipe_refresh.setColorSchemeResources(R.color.colorPrimary);
     }
 
     @Override
@@ -126,5 +131,20 @@ public class WeatherView extends AppCompatActivity implements IWeatherView, View
     @Override
     public void updateBackGround(String imageCahe) {
         Glide.with(this).load(imageCahe).into(bing_pic_img);
+    }
+
+    @Override
+    public void colseRefresh() {
+        swipe_refresh.setRefreshing(false);//关闭下拉刷新
+    }
+
+    public void setListener(){
+        swipe_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {//下拉刷新
+            @Override
+            public void onRefresh() {
+                presenter.update("广州",WeatherView.this);
+                presenter.updateBack(WeatherView.this);
+            }
+        });
     }
 }

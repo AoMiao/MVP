@@ -1,4 +1,4 @@
-package com.vince.mvp.Presenter;
+package com.vince.mvp.WeatherModule.Presenter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -6,10 +6,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 
-import com.vince.mvp.Model.Utilily;
-import com.vince.mvp.Model.Weather;
-import com.vince.mvp.View.IWeatherView;
-import com.vince.mvp.View.WeatherView;
+import com.vince.mvp.WeatherModule.Model.Utilily;
+import com.vince.mvp.WeatherModule.Model.Weather;
+import com.vince.mvp.WeatherModule.View.IWeatherView;
 
 import java.io.IOException;
 
@@ -25,7 +24,7 @@ public class WeatherPresenterImpl implements IWeatherPresenter {
     private IWeatherView weatherView;
     private android.os.Handler handler;
 
-    public WeatherPresenterImpl(WeatherView weatherView){
+    public WeatherPresenterImpl(IWeatherView weatherView){
         this.weatherView = weatherView;
         handler = new Handler(Looper.getMainLooper());
     }
@@ -72,6 +71,7 @@ public class WeatherPresenterImpl implements IWeatherPresenter {
                         editor.putString("imgCache", imageCahe);//缓存功能
                         editor.apply();
                         weatherView.updateBackGround(imageCahe);
+                        weatherView.colseRefresh();
                     }
                 });
             }

@@ -1,4 +1,4 @@
-package com.vince.mvp.Model;
+package com.vince.mvp.WeatherModule.Model;
 
 import com.google.gson.annotations.SerializedName;
 

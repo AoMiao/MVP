@@ -1,4 +1,4 @@
-package com.vince.mvp.Presenter;
+package com.vince.mvp.WeatherModule.Presenter;
 
 import android.content.Context;
 

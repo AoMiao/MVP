@@ -1,4 +1,4 @@
-package com.vince.mvp.Model;
+package com.vince.mvp.WeatherModule.Model;
 
 /**
  * Created by Administrator on 2017/2/20.

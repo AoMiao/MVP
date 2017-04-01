@@ -1,6 +1,6 @@
-package com.vince.mvp.View;
+package com.vince.mvp.WeatherModule.View;
 
-import com.vince.mvp.Model.Weather;
+import com.vince.mvp.WeatherModule.Model.Weather;
 
 /**
  * Created by Administrator on 2017/3/30.
@@ -9,4 +9,5 @@ import com.vince.mvp.Model.Weather;
 public interface IWeatherView {
     public void updateWeather(Weather weather);
     public void updateBackGround(String imageCahe);
+    public void colseRefresh();
 }
