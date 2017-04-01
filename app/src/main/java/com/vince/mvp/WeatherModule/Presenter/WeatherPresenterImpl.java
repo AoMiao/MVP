@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 
-import com.vince.mvp.WeatherModule.Model.Utilily;
+import com.vince.mvp.WeatherModule.Model.HttpUtil;
 import com.vince.mvp.WeatherModule.Model.Weather;
 import com.vince.mvp.WeatherModule.View.IWeatherView;
 
@@ -32,14 +32,14 @@ public class WeatherPresenterImpl implements IWeatherPresenter {
     @Override
     public void update(String weatherCode, final Context context) {
         String address = "https://free-api.heweather.com/v5/weather?city="+weatherCode+"&key=bc0418b57b2d4918819d3974ac1285d9";
-        Utilily.sendHttpURL(address, new Callback() {
+        HttpUtil.sendHttpURL(address, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String weatherContent = response.body().string();
-                final Weather weather = Utilily.handleWeatherCode(weatherContent);
+                final Weather weather = HttpUtil.handleWeatherCode(weatherContent);
                 handler.post(new Runnable() {//回到主线程修改UI
                     @Override
                     public void run() {
@@ -57,7 +57,7 @@ public class WeatherPresenterImpl implements IWeatherPresenter {
     @Override
     public void updateBack(final Context context) {
         String imageaddress = "http://guolin.tech/api/bing_pic";
-        Utilily.sendHttpURL(imageaddress, new Callback() {
+        HttpUtil.sendHttpURL(imageaddress, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
             }
@@ -84,7 +84,7 @@ public class WeatherPresenterImpl implements IWeatherPresenter {
         String weatherCache = spf.getString("weather", null);
         final String imgCache = spf.getString("imgCache", null);
         if(weatherCache!=null&&imgCache!=null){
-            final Weather weather = Utilily.handleWeatherCode(weatherCache);
+            final Weather weather = HttpUtil.handleWeatherCode(weatherCache);
             handler.post(new Runnable() {
                 @Override
                 public void run() {

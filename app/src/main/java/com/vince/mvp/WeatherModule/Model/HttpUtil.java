@@ -14,7 +14,7 @@ import okhttp3.Request;
  * Created by Administrator on 2017/3/30.
  */
 
-public class Utilily {
+public class HttpUtil {
 
     public static void sendHttpURL(String address, Callback callback){
         OkHttpClient client = new OkHttpClient();

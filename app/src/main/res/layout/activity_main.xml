@@ -1,54 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
-    <!---->
+    tools:context="com.vince.mvp.CityModule.View.MainActivity">
 
-
-
-    <ImageView
-        android:id="@+id/bing_pic_img"
+    <fragment
+        android:id="@+id/choose_area_fragment"
+        android:name="com.vince.mvp.CityModule.View.ChooseAreaFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
-
-
-            <android.support.v4.widget.SwipeRefreshLayout
-                android:id="@+id/swipe_refresh"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <!--ScrollView只允许有一个子项布局-->
-                <ScrollView
-                    android:id="@+id/weather_scrollview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:overScrollMode="never"
-                    android:scrollbars="none">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:fitsSystemWindows="true"
-                        android:orientation="vertical">
-                        <!--fitsSystemWindows表示会为系统状态栏留出空间-->
-
-                        <include layout="@layout/title"></include>
-
-                        <include layout="@layout/now"></include>
-
-                        <include layout="@layout/forecast"></include>
-
-                        <include layout="@layout/aqi"></include>
-
-                        <include layout="@layout/suggestion"></include>
-                    </LinearLayout>
-                </ScrollView>
-
-            </android.support.v4.widget.SwipeRefreshLayout>
-
-
-
-
+        android:layout_height="match_parent"/>
 </FrameLayout>
