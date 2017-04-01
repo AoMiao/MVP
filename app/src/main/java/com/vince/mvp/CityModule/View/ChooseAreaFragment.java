@@ -1,6 +1,8 @@
 package com.vince.mvp.CityModule.View;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -55,7 +57,7 @@ public class ChooseAreaFragment extends Fragment implements FragmentImpl {
         View view = inflater.inflate(R.layout.chose_area, container, false);
         initView(view);
         setListener();
-        presenter = new CityPresenter((FragmentImpl) view);
+        presenter = new CityPresenter(this);
         return view;
 
     }
@@ -66,6 +68,7 @@ public class ChooseAreaFragment extends Fragment implements FragmentImpl {
         presenter.queryProvince();
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     public void initView(View view){
         backbutton = (Button) view.findViewById(R.id.backbutton);//注意这里要通过view才能用findViewById.最外面那层布局
         title = (TextView) view.findViewById(R.id.titlename);

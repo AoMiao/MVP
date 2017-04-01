@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+    <dbname value="mvp"/>
+    <version value="1"/>
+    <list>
+        <mapping class="com.vince.mvp.CityModule.Model.Province"/>
+        <mapping class="com.vince.mvp.CityModule.Model.City"/>
+        <mapping class="com.vince.mvp.CityModule.Model.County"/>
+    </list>
+</litepal>
