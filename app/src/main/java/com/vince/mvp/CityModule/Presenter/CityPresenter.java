@@ -60,8 +60,8 @@ public class CityPresenter implements CityPresenterImpl {
 
     @Override
     public void queryCity(int ProvinceID, int ProvinceCode) {
-        this.provinceID = provinceID;
-        this.provinceCode = provinceCode;
+        this.provinceID = ProvinceID;
+        this.provinceCode = ProvinceCode;
         cityList = null;
         cityList = DataSupport.where("provinceId=?", String.valueOf(ProvinceID)).find(City.class);
         if (cityList.size() > 0) {
@@ -112,7 +112,6 @@ public class CityPresenter implements CityPresenterImpl {
                 if (type.equals("province")) {
                     flag = Utility.handleProvinceResponse(data);//解析数据把省数据存到本地数据库
                 } else if (type.equals("city")) {//这里的ID是省类的id字段，不是code
-                    //Log.d("me", "省份ID "+String.valueOf(provinceID));
                     flag = Utility.handleCityResponse(data, provinceID);//先把城市存到本地，还把省id联系起来
                 } else if (type.equals("county")) {
                     flag = Utility.handleCountyResponse(data, CityID);

@@ -84,8 +84,6 @@ public class ChooseAreaFragment extends Fragment implements FragmentImpl {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (currentLevel == LEVEL_PROVINCE) {
                     selectProvince = provinceList.get(i);
-                    Log.d("me", "省份ID "+String.valueOf(selectProvince.getId()));
-                    Log.d("me", "省份Code "+String.valueOf(selectProvince.getProvinceCode()));
                     presenter.queryCity(selectProvince.getId(),selectProvince.getProvinceCode());
                 } else if (currentLevel == LEVEL_CITY) {
                     selectCity = cityList.get(i);
