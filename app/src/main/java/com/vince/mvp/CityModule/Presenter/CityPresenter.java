@@ -31,19 +31,27 @@ public class CityPresenter implements CityPresenterImpl {
     private List<County> countyList;
     private int provinceID;
     private int provinceCode;
+    private int CityID;
+    private int CityCode;
 
     private android.os.Handler handler;
 
-    public CityPresenter(FragmentImpl fragment){
+    public CityPresenter(FragmentImpl fragment) {
         this.fragment = fragment;
         handler = new Handler(Looper.getMainLooper());
     }
 
     @Override
     public void queryProvince() {
+        provinceList = null;
         provinceList = DataSupport.findAll(Province.class);
         if (provinceList.size() > 0) {
-            fragment.SetProvince(provinceList);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    fragment.SetProvince(provinceList);
+                }
+            });
         } else {
             String address = "http://guolin.tech/api/china";
             queryFormServer(address, "province");
@@ -51,12 +59,18 @@ public class CityPresenter implements CityPresenterImpl {
     }
 
     @Override
-    public void queryCity(int ProvinceID,int ProvinceCode) {
+    public void queryCity(int ProvinceID, int ProvinceCode) {
         this.provinceID = provinceID;
         this.provinceCode = provinceCode;
+        cityList = null;
         cityList = DataSupport.where("provinceId=?", String.valueOf(ProvinceID)).find(City.class);
         if (cityList.size() > 0) {
-            fragment.SetCity(cityList);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    fragment.SetCity(cityList);
+                }
+            });
         } else {
             String address = "http://guolin.tech/api/china/" + ProvinceCode;
             queryFormServer(address, "city");
@@ -64,8 +78,22 @@ public class CityPresenter implements CityPresenterImpl {
     }
 
     @Override
-    public void queryCounty() {
-
+    public void queryCounty(int CityID, int CityCode) {
+        this.CityID = CityID;
+        this.CityCode = CityCode;
+        countyList = null;
+        countyList = DataSupport.where("cityId=?", String.valueOf(CityID)).find(County.class);
+        if (countyList.size() > 0) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    fragment.SetCounty(countyList);
+                }
+            });
+        } else {
+            String address = "http://guolin.tech/api/china/" + provinceCode + "/" + CityCode;
+            queryFormServer(address, "county");
+        }
     }
 
     public void queryFormServer(String address, final String type) {
@@ -84,24 +112,22 @@ public class CityPresenter implements CityPresenterImpl {
                 if (type.equals("province")) {
                     flag = Utility.handleProvinceResponse(data);//解析数据把省数据存到本地数据库
                 } else if (type.equals("city")) {//这里的ID是省类的id字段，不是code
+                    //Log.d("me", "省份ID "+String.valueOf(provinceID));
                     flag = Utility.handleCityResponse(data, provinceID);//先把城市存到本地，还把省id联系起来
                 } else if (type.equals("county")) {
-                    //flag = Utility.handleCountyResponse(data, selectCity.getId());
+                    flag = Utility.handleCountyResponse(data, CityID);
                 }
                 if (flag) {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (type.equals("province")) {
-                                queryProvince();
-                            } else if (type.equals("city")) {
-                                queryCity(provinceID,provinceCode);
-                            } else if (type.equals("county")) {
-                                //queryCounty();
-                            }
-                        }
-                    });
+                    if (type.equals("province")) {
+                        queryProvince();
+                    } else if (type.equals("city")) {
+                        queryCity(provinceID, provinceCode);
+                    } else if (type.equals("county")) {
+                        queryCounty(CityID, CityCode);
+                    }
                 }
+
+
             }
         });
 

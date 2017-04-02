@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,10 +84,12 @@ public class ChooseAreaFragment extends Fragment implements FragmentImpl {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (currentLevel == LEVEL_PROVINCE) {
                     selectProvince = provinceList.get(i);
+                    Log.d("me", "省份ID "+String.valueOf(selectProvince.getId()));
+                    Log.d("me", "省份Code "+String.valueOf(selectProvince.getProvinceCode()));
                     presenter.queryCity(selectProvince.getId(),selectProvince.getProvinceCode());
                 } else if (currentLevel == LEVEL_CITY) {
                     selectCity = cityList.get(i);
-                    presenter.queryCounty();
+                    presenter.queryCounty(selectCity.getId(),selectCity.getCityCode());
                 } else if (currentLevel == LEVEL_COUNTY) {
                     /*String weatherCode = countyList.get(i).getWeatherCode();
 
@@ -134,7 +137,13 @@ public class ChooseAreaFragment extends Fragment implements FragmentImpl {
     }
 
     @Override
-    public void SetCounty() {
-
+    public void SetCounty(List<County> countyList) {
+        datalist.clear();
+        for (County c : countyList) {
+            datalist.add(c.getCountyName());
+        }
+        adapter.notifyDataSetChanged();
+        listView.setSelection(0);
+        currentLevel = LEVEL_COUNTY;
     }
 }

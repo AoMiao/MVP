@@ -7,5 +7,5 @@ package com.vince.mvp.CityModule.Presenter;
 public interface CityPresenterImpl {
     void queryProvince();
     void queryCity(int ProvinceID,int ProvinceCode);
-    void queryCounty();
+    void queryCounty(int CityID,int CityCode);
 }

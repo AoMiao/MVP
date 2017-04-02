@@ -1,6 +1,7 @@
 package com.vince.mvp.CityModule.View;
 
 import com.vince.mvp.CityModule.Model.City;
+import com.vince.mvp.CityModule.Model.County;
 import com.vince.mvp.CityModule.Model.Province;
 
 import java.util.List;
@@ -12,5 +13,5 @@ import java.util.List;
 public interface FragmentImpl {
     public void SetProvince(List<Province> provinceList);
     public void SetCity(List<City> cityList);
-    public void SetCounty();
+    public void SetCounty(List<County> countyList);
 }
