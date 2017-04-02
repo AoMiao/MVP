@@ -71,7 +71,7 @@ public class WeatherPresenterImpl implements IWeatherPresenter {
                         editor.putString("imgCache", imageCahe);//缓存功能
                         editor.apply();
                         weatherView.updateBackGround(imageCahe);
-                        weatherView.colseRefresh();
+                        //weatherView.colseRefresh();
                     }
                 });
             }

@@ -50,14 +50,17 @@ public class WeatherView extends AppCompatActivity implements IWeatherView, View
             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.weather_layout);
         initView();
         setListener();
         presenter = new WeatherPresenterImpl(this);
-        if(!presenter.isCahe(this)){
+        String weatherCode = getIntent().getStringExtra("weatherCode");
+        presenter.update(weatherCode,this);
+        presenter.updateBack(this);
+        /*if(!presenter.isCahe(this)){
             presenter.update("广州",this);
             presenter.updateBack(this);
-        }
+        }*/
     }
 
 
@@ -77,7 +80,7 @@ public class WeatherView extends AppCompatActivity implements IWeatherView, View
         choose_button = (Button) findViewById(R.id.choose_button);
         bing_pic_img = (ImageView) findViewById(R.id.bing_pic_img);
         swipe_refresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
-        swipe_refresh.setColorSchemeResources(R.color.colorPrimary);
+        //swipe_refresh.setColorSchemeResources(R.color.colorPrimary);
     }
 
     @Override
@@ -139,12 +142,12 @@ public class WeatherView extends AppCompatActivity implements IWeatherView, View
     }
 
     public void setListener(){
-        swipe_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {//下拉刷新
+       /* swipe_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {//下拉刷新
             @Override
             public void onRefresh() {
                 presenter.update("广州",WeatherView.this);
                 presenter.updateBack(WeatherView.this);
             }
-        });
+        });*/
     }
 }

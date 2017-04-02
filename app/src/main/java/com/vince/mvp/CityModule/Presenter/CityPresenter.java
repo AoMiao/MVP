@@ -43,7 +43,6 @@ public class CityPresenter implements CityPresenterImpl {
 
     @Override
     public void queryProvince() {
-        provinceList = null;
         provinceList = DataSupport.findAll(Province.class);
         if (provinceList.size() > 0) {
             handler.post(new Runnable() {
@@ -62,7 +61,6 @@ public class CityPresenter implements CityPresenterImpl {
     public void queryCity(int ProvinceID, int ProvinceCode) {
         this.provinceID = ProvinceID;
         this.provinceCode = ProvinceCode;
-        cityList = null;
         cityList = DataSupport.where("provinceId=?", String.valueOf(ProvinceID)).find(City.class);
         if (cityList.size() > 0) {
             handler.post(new Runnable() {
@@ -81,7 +79,6 @@ public class CityPresenter implements CityPresenterImpl {
     public void queryCounty(int CityID, int CityCode) {
         this.CityID = CityID;
         this.CityCode = CityCode;
-        countyList = null;
         countyList = DataSupport.where("cityId=?", String.valueOf(CityID)).find(County.class);
         if (countyList.size() > 0) {
             handler.post(new Runnable() {

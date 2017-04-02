@@ -2,11 +2,11 @@ package com.vince.mvp.CityModule.View;
 
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +22,7 @@ import com.vince.mvp.CityModule.Model.Province;
 import com.vince.mvp.CityModule.Presenter.CityPresenter;
 import com.vince.mvp.CityModule.Presenter.CityPresenterImpl;
 import com.vince.mvp.R;
+import com.vince.mvp.WeatherModule.View.WeatherView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,10 +90,15 @@ public class ChooseAreaFragment extends Fragment implements FragmentImpl {
                     selectCity = cityList.get(i);
                     presenter.queryCounty(selectCity.getId(),selectCity.getCityCode());
                 } else if (currentLevel == LEVEL_COUNTY) {
-                    /*String weatherCode = countyList.get(i).getWeatherCode();
+                    String weatherCode = countyList.get(i).getWeatherCode();
+                    Intent intent = new Intent(getActivity(), WeatherView.class);
+                    intent.putExtra("weatherCode", weatherCode);
+                    startActivity(intent);
+                    getActivity().finish();
 
+                    /*String weatherCode = countyList.get(i).getWeatherCode();
                     if (getActivity() instanceof MainActivity) {
-                        Intent intent = new Intent(getActivity(), WeatherAcitivity.class);
+                        Intent intent = new Intent(getActivity(), WeatherView.class);
                         intent.putExtra("weatherCode", weatherCode);
                         startActivity(intent);
                         getActivity().finish();
@@ -136,6 +142,7 @@ public class ChooseAreaFragment extends Fragment implements FragmentImpl {
 
     @Override
     public void SetCounty(List<County> countyList) {
+        this.countyList = countyList;
         datalist.clear();
         for (County c : countyList) {
             datalist.add(c.getCountyName());
