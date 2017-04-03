@@ -40,11 +40,12 @@ public class WeatherPresenterImpl implements IWeatherPresenter {
             public void onResponse(Call call, Response response) throws IOException {
                 final String weatherContent = response.body().string();
                 final Weather weather = HttpUtil.handleWeatherCode(weatherContent);
+                final String weatherCode = weather.basic.weatherCode;
                 handler.post(new Runnable() {//回到主线程修改UI
                     @Override
                     public void run() {
                         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-                        editor.putString("weather", weatherContent);//缓存功能
+                        editor.putString("weather", weatherCode);//缓存功能
                         editor.apply();
                         weatherView.updateWeather(weather);
                     }

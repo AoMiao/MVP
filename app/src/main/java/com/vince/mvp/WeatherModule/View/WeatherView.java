@@ -1,8 +1,10 @@
 package com.vince.mvp.WeatherModule.View;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -43,6 +45,7 @@ public class WeatherView extends AppCompatActivity implements IWeatherView {
     public DrawerLayout drawerLayout;
     private String weatherCode;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    private SharedPreferences spf;
 
     private IWeatherPresenter presenter;
 
@@ -58,9 +61,15 @@ public class WeatherView extends AppCompatActivity implements IWeatherView {
         initView();
         setListener();
         presenter = new WeatherPresenterImpl(this);
-        weatherCode = getIntent().getStringExtra("weatherCode");
-        presenter.update(weatherCode,this);
-        presenter.updateBack(this);
+        weatherCode = spf.getString("weather", null);
+        if(weatherCode!=null){
+            presenter.update(weatherCode,this);
+            presenter.updateBack(this);
+        }else {
+            weatherCode = getIntent().getStringExtra("weatherCode");
+            presenter.update(weatherCode,this);
+            presenter.updateBack(this);
+        }
         /*if(!presenter.isCahe(this)){
             presenter.update("广州",this);
             presenter.updateBack(this);
@@ -86,6 +95,7 @@ public class WeatherView extends AppCompatActivity implements IWeatherView {
         swipe_refresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         swipe_refresh.setColorSchemeResources(R.color.colorPrimary);
+        spf = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
 
@@ -159,7 +169,8 @@ public class WeatherView extends AppCompatActivity implements IWeatherView {
             }
         });
     }
-    public void ClickFromItself(String weatherCode){
+    public void ClickFromItself(String weatherCode){//在自己的界面的fragment点击时调用
+        this.weatherCode = weatherCode;
         drawerLayout.closeDrawer(GravityCompat.START);
         swipe_refresh.setRefreshing(true);
         presenter.update(weatherCode,WeatherView.this);

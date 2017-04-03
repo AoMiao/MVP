@@ -100,20 +100,16 @@ public class ChooseAreaFragment extends Fragment implements FragmentImpl {
                         WeatherView weatherView = (WeatherView) getActivity();
                         weatherView.ClickFromItself(weatherCode);
                     }
-
-
-                    /*String weatherCode = countyList.get(i).getWeatherCode();
-                    if (getActivity() instanceof MainActivity) {
-                        Intent intent = new Intent(getActivity(), WeatherView.class);
-                        intent.putExtra("weatherCode", weatherCode);
-                        startActivity(intent);
-                        getActivity().finish();
-                    }else if(getActivity()instanceof WeatherAcitivity){
-                        WeatherAcitivity weatherAcitivity = (WeatherAcitivity) getActivity();
-                        weatherAcitivity.drawerLayout.closeDrawer(GravityCompat.START);
-                        weatherAcitivity.swipe_refresh.setRefreshing(true);
-                        weatherAcitivity.weatherCode = weatherCode;
-                        weatherAcitivity.queryFormServer(weatherCode);*/
+                }
+            }
+        });
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentLevel == LEVEL_CITY) {
+                    presenter.queryProvince();
+                } else if (currentLevel == LEVEL_COUNTY) {
+                    presenter.queryCity(selectProvince.getId(),selectProvince.getProvinceCode());
                 }
             }
         });
