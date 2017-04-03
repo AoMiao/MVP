@@ -3,6 +3,8 @@ package com.vince.mvp.WeatherModule.View;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -13,16 +15,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.vince.mvp.R;
 import com.vince.mvp.WeatherModule.Model.Forecast;
 import com.vince.mvp.WeatherModule.Model.Weather;
 import com.vince.mvp.WeatherModule.Presenter.IWeatherPresenter;
 import com.vince.mvp.WeatherModule.Presenter.WeatherPresenterImpl;
-import com.vince.mvp.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class WeatherView extends AppCompatActivity implements IWeatherView, View.OnClickListener {
+public class WeatherView extends AppCompatActivity implements IWeatherView {
     private TextView title_city;
     private TextView update_time;
     private TextView tmp_text;
@@ -38,6 +40,8 @@ public class WeatherView extends AppCompatActivity implements IWeatherView, View
     private ImageView now_png;
     private ImageView bing_pic_img;
     private SwipeRefreshLayout swipe_refresh;
+    public DrawerLayout drawerLayout;
+    private String weatherCode;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     private IWeatherPresenter presenter;
@@ -54,7 +58,7 @@ public class WeatherView extends AppCompatActivity implements IWeatherView, View
         initView();
         setListener();
         presenter = new WeatherPresenterImpl(this);
-        String weatherCode = getIntent().getStringExtra("weatherCode");
+        weatherCode = getIntent().getStringExtra("weatherCode");
         presenter.update(weatherCode,this);
         presenter.updateBack(this);
         /*if(!presenter.isCahe(this)){
@@ -80,17 +84,11 @@ public class WeatherView extends AppCompatActivity implements IWeatherView, View
         choose_button = (Button) findViewById(R.id.choose_button);
         bing_pic_img = (ImageView) findViewById(R.id.bing_pic_img);
         swipe_refresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
-        //swipe_refresh.setColorSchemeResources(R.color.colorPrimary);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        swipe_refresh.setColorSchemeResources(R.color.colorPrimary);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.choose_button:
 
-                break;
-        }
-    }
 
     @Override
     public void updateWeather(Weather weather) {
@@ -141,13 +139,30 @@ public class WeatherView extends AppCompatActivity implements IWeatherView, View
         swipe_refresh.setRefreshing(false);//关闭下拉刷新
     }
 
+    @Override
+    public void openRefresh() {
+        swipe_refresh.setRefreshing(true);
+    }
+
     public void setListener(){
-       /* swipe_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {//下拉刷新
+        choose_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+        swipe_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {//下拉刷新
             @Override
             public void onRefresh() {
-                presenter.update("广州",WeatherView.this);
+                presenter.update(weatherCode,WeatherView.this);
                 presenter.updateBack(WeatherView.this);
             }
-        });*/
+        });
+    }
+    public void ClickFromItself(String weatherCode){
+        drawerLayout.closeDrawer(GravityCompat.START);
+        swipe_refresh.setRefreshing(true);
+        presenter.update(weatherCode,WeatherView.this);
+        presenter.updateBack(WeatherView.this);
     }
 }

@@ -91,10 +91,16 @@ public class ChooseAreaFragment extends Fragment implements FragmentImpl {
                     presenter.queryCounty(selectCity.getId(),selectCity.getCityCode());
                 } else if (currentLevel == LEVEL_COUNTY) {
                     String weatherCode = countyList.get(i).getWeatherCode();
-                    Intent intent = new Intent(getActivity(), WeatherView.class);
-                    intent.putExtra("weatherCode", weatherCode);
-                    startActivity(intent);
-                    getActivity().finish();
+                    if(getActivity()instanceof MainActivity){
+                        Intent intent = new Intent(getActivity(), WeatherView.class);
+                        intent.putExtra("weatherCode", weatherCode);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }else if(getActivity()instanceof WeatherView){
+                        WeatherView weatherView = (WeatherView) getActivity();
+                        weatherView.ClickFromItself(weatherCode);
+                    }
+
 
                     /*String weatherCode = countyList.get(i).getWeatherCode();
                     if (getActivity() instanceof MainActivity) {

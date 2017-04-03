@@ -10,4 +10,5 @@ public interface IWeatherView {
     public void updateWeather(Weather weather);
     public void updateBackGround(String imageCahe);
     public void colseRefresh();
+    public void openRefresh();
 }
