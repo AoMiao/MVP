@@ -153,4 +153,21 @@ public class ChooseAreaFragment extends Fragment implements FragmentImpl {
         listView.setSelection(0);
         currentLevel = LEVEL_COUNTY;
     }
+
+    @Override
+    public void showProgressDialog() {
+        if(progressDialog==null){
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMessage("正在加载");
+            progressDialog.setCanceledOnTouchOutside(false);
+        }
+        progressDialog.show();
+    }
+
+    @Override
+    public void closeProgressDialog() {
+        if(progressDialog!=null){
+            progressDialog.dismiss();
+        }
+    }
 }

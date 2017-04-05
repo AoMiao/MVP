@@ -48,6 +48,7 @@ public class CityPresenter implements CityPresenterImpl {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
+                    fragment.closeProgressDialog();
                     fragment.SetProvince(provinceList);
                 }
             });
@@ -66,6 +67,7 @@ public class CityPresenter implements CityPresenterImpl {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
+                    fragment.closeProgressDialog();
                     fragment.SetCity(cityList);
                 }
             });
@@ -84,6 +86,7 @@ public class CityPresenter implements CityPresenterImpl {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
+                    fragment.closeProgressDialog();
                     fragment.SetCounty(countyList);
                 }
             });
@@ -93,8 +96,18 @@ public class CityPresenter implements CityPresenterImpl {
         }
     }
 
+    @Override
+    public void showDialog() {
+        fragment.showProgressDialog();
+    }
+
+    @Override
+    public void closeDialog() {
+        fragment.closeProgressDialog();
+    }
+
     public void queryFormServer(String address, final String type) {
-        //showProgressDialog();
+        showDialog();
         HttpUtil.sendHttpURL(address, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -126,8 +139,5 @@ public class CityPresenter implements CityPresenterImpl {
 
             }
         });
-
     }
 }
-
-

@@ -14,4 +14,6 @@ public interface FragmentImpl {
     public void SetProvince(List<Province> provinceList);
     public void SetCity(List<City> cityList);
     public void SetCounty(List<County> countyList);
+    public void showProgressDialog();
+    public void closeProgressDialog();
 }

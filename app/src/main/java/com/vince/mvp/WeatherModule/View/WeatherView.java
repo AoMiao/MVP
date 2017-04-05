@@ -61,7 +61,7 @@ public class WeatherView extends AppCompatActivity implements IWeatherView {
         initView();
         setListener();
         presenter = new WeatherPresenterImpl(this);
-        weatherCode = spf.getString("weather", null);
+        weatherCode = spf.getString("weather", null);//获取天气代码缓存
         if(weatherCode!=null){
             presenter.update(weatherCode,this);
             presenter.updateBack(this);
@@ -70,10 +70,6 @@ public class WeatherView extends AppCompatActivity implements IWeatherView {
             presenter.update(weatherCode,this);
             presenter.updateBack(this);
         }
-        /*if(!presenter.isCahe(this)){
-            presenter.update("广州",this);
-            presenter.updateBack(this);
-        }*/
     }
 
 
@@ -101,7 +97,7 @@ public class WeatherView extends AppCompatActivity implements IWeatherView {
 
 
     @Override
-    public void updateWeather(Weather weather) {
+    public void updateWeather(Weather weather) {//对天气控件赋值显示
         title_city.setText(weather.basic.cityName);
         update_time.setText(weather.basic.update.updateTime.split(" ")[1] + "发布");
         tmp_text.setText(weather.now.temperature + "°C");
